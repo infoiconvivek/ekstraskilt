@@ -1,0 +1,10 @@
+
+/*# sourceMappingURL=custom.min.css.map */
+
+.hidden.sm\:flex-1.sm\:flex.sm\:items-center.sm\:justify-between {
+    margin-top: 20px !important;
+}
+
+.flex.justify-between.flex-1.sm\:hidden {
+    display: none !important;
+}
