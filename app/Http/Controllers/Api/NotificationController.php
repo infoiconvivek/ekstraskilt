@@ -25,7 +25,7 @@ class NotificationController extends Controller
 
         $response = [
             'success' => true,
-            'message' => 'slot List',
+            'message' => 'Notifications List',
             'notifications' => $notifications,
         ];
 

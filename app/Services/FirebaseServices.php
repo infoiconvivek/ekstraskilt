@@ -26,10 +26,20 @@ class FirebaseServices {
     {
         
         
-        $url = 'https://fcm.googleapis.com/fcm/send';
-        $FcmToken = Device::whereNotNull('token')->pluck('token')->all();
+         $url = 'https://fcm.googleapis.com/fcm/send';
+
+         if($request['user_id'] != '')
+         {
+            $FcmToken = Device::where('user_id',$request['user_id'])->whereNotNull('token')->pluck('token')->all();
+         } else
+         {
+            $FcmToken = Device::whereNotNull('token')->pluck('token')->all();
+         }
+         
+        /// $FcmToken = [0 => "cbgiRBszBEZMtSjuEN8MNv:APA91bFkDd9toyn0FPZCkDYuniPPUxuEpMdc7xNbTWkGDhnPRX640XvL6tNrou1W7-H_L_PGR_JOkxgvWDSgB0DQSdWmiJWj8vUhmkBd1QydtHkqglY_rmH309FU8M3cNB-WFRH7VCQv"];
+        // dd($FcmToken);
           
-        $serverKey = env('FIREBASE_SERVER_KEY');;
+        $serverKey = env('FIREBASE_SERVER_KEY');
   
         $data = [
             "registration_ids" => $FcmToken,

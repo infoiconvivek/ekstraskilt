@@ -15,11 +15,18 @@ use App\Models\Patient;
 use App\Models\MedicalHistory;
 use App\Models\Booking;
 use App\Models\Job;
+use App\Services\FirebaseServices;
+use Exception;
 use Mail;
 use DB;
 
 class BookingController extends Controller
 {
+
+    public function __construct(FirebaseServices $firebaseServices)
+    {
+        $this->firebaseServices = $firebaseServices;
+    }
 
     public function Booking(Request $request)
     {
@@ -46,6 +53,17 @@ class BookingController extends Controller
                 $jobData = Job::find($request->job_id);
                 $jobData->status =  2;
                 $jobData->save();
+
+
+                if ($booking) {
+                    $msg = "Thank you for the applying the Job, it is your please be on time ";
+                    $notify_msg = "Job: ".$job->title;
+
+                    $this->firebaseServices->sendNotification(['title' => $msg, 'body' => $notify_msg, 'token' => '', 'user_id' => auth('api')->user()->id]);
+                } 
+        
+                
+
              } else
              {
                 $booking = [];
