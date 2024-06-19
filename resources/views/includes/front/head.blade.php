@@ -1,18 +1,31 @@
 <head>
     <meta charset="UTF-8">
-    <title>Signaco</title>
-    <meta content="width=device-width, initial-scale=1" name="viewport">
-    <link href="{{URL::asset('front/img/favicon.png')}}" rel="shortcut icon" type="image/x-icon">
-    <link href="{{URL::asset('front/stylesheets/font-awesome.min.css')}}" rel="stylesheet">
-    <link href="{{URL::asset('front/stylesheets/magnific-popup.css')}}" rel="stylesheet">
-    <link href="{{URL::asset('front/stylesheets/animate.min.css')}}" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link href="{{URL::asset('front/stylesheets/nice-select.css')}}" rel="stylesheet">
-    <link href="{{URL::asset('front/stylesheets/owl.carousel.min.css')}}" rel="stylesheet">
-    <link href="{{URL::asset('front/stylesheets/swiper-bundle.min.css')}}" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <title>Ekstra Bilskilt &bull; Gaver &bull; Klær &bull; Kvalitet i over 10 år &bull; Ekstraskilt.no</title>
+    <meta name="keywords" content="HTML5 Template" />
+    <meta name="description" content="">
+    <meta name="author" content="D-THEMES">
 
-    <!-- Magnific Popup core CSS file -->
-    <link href="{{URL::asset('front/stylesheets/bootstrap.min.css')}}" rel="stylesheet">
-    <link href="{{URL::asset('front/stylesheets/custom.css')}}" rel="stylesheet">
+    <link rel="icon" type="image/png" href="{{URL::asset('front/images/favicon.png')}}">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:wght@100;200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="{{URL::asset('front/vendor/fontawesome-free/css/all.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{URL::asset('front/vendor/animate/animate.min.css')}}">
+
+    <link rel="stylesheet" type="text/css" href="{{URL::asset('front/vendor/magnific-popup/magnific-popup.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{URL::asset('front/vendor/owl-carousel/owl.carousel.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{URL::asset('front/vendor/sticky-icon/stickyicon.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{URL::asset('front/vendor/nouislider/nouislider.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{URL::asset('front/vendor/photoswipe/photoswipe.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{URL::asset('front/vendor/photoswipe/default-skin/default-skin.min.css')}}">
+
+    <link rel="stylesheet" type="text/css" href="{{URL::asset('front/css/style.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{URL::asset('front/css/livechat.css')}}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.5.0/fabric.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
 
 </head>

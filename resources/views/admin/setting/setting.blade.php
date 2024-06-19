@@ -289,6 +289,8 @@
                                                         </div>
                                                     </div>
 
+                                                    
+
                                                     <div class="col-lg-12">
                                                         <div class="mb-3">
                                                             <label for="default_meta_title" class="form-label">Meta Title</label>
@@ -357,6 +359,13 @@
                                                         </div>
                                                     </div>
 
+                                                    <div class="col-lg-6">
+                                                        <div class="mb-3">
+                                                            <label for="linkedin" class="form-label">YouTube URL</label>
+                                                            <input type="text" class="form-control" id="youtube_url" name="youtube_url" value="{{ isset($globalSetting)?$globalSetting['youtube_url']:old('youtube_url') }}">
+                                                        </div>
+                                                    </div>
+
 
 
                                                     <!--end col-->
@@ -364,6 +373,22 @@
                                                         <div class="mb-3">
                                                             <label for="address" class="form-label">Address</label>
                                                             <textarea class="form-control" id="site_address" name="site_address" rows="3" placeholder="Enter Address"> {{ isset($globalSetting)?$globalSetting['site_address']:old('site_address') }} </textarea>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="col-lg-12">
+                                                        <div class="mb-3">
+                                                            <label for="site_map" class="form-label">Map</label>
+                                                            <textarea class="form-control" id="site_map" name="site_map" rows="3" placeholder="Enter Map"> {{ isset($globalSetting)?$globalSetting['site_map']:old('site_map') }} </textarea>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="col-lg-12">
+                                                        <div class="mb-3">
+                                                            <label for="site_about" class="form-label">About</label>
+                                                            <textarea class="form-control" id="site_about" name="site_about" rows="3" placeholder="Enter About Website"> {{ isset($globalSetting)?$globalSetting['site_about']:old('site_about') }} </textarea>
                                                         </div>
                                                     </div>
                                                     <!--end col-->

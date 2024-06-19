@@ -44,7 +44,6 @@
                                             <tr>
                                                 <th scope="col">S.No</th>
                                                 <th scope="col">Title</th>
-                                                <th scope="col">Image</th>
                                                 <th scope="col">Status</th>
                                                 <th scope="col">Action</th>
                                             </tr>
@@ -56,7 +55,6 @@
                                             <tr row_id="{{$row->id}}" class="get_row_{{$row->id}}">
                                                 <td>{{$key+1+($sections->currentPage()-1) * ($sections->perPage())}}</td>
                                                 <td>{{$row->title ?? ''}}</td>
-                                                <td><img src="{{URL::asset($row->image)}}" style="height: 80px; width: 80px;"></td>
                                                 <td>@if($row->status == 1) <button type="button" class="btn btn-sm btn-light"> Active</button> @else <button type="button" class="btn btn-sm btn-light"> Inactive</button> @endif</td>
                                                 <td>
                                                     <a class="btn btn-info btn-sm waves-effect waves-light" href="{{url('admin/page-section/edit/'.$row->id)}}">

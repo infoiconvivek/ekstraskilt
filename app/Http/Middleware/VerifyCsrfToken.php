@@ -12,6 +12,9 @@ class VerifyCsrfToken extends Middleware
      * @var array<int, string>
      */
     protected $except = [
+        'user-auth/register',
+        'user-auth/login',
+        'admin/design/tool-save',
         'admin/save-profile-image',
         'admin/save-profile-cover-image',
         'admin/login',

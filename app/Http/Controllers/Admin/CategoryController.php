@@ -13,13 +13,16 @@ class CategoryController extends Controller
 {
     public function index(Request $request)
     {
-        $data['categories'] = Category::orderBy('id','desc')->paginate(15);
+        $data['categories'] = Category::orderBy('id', 'desc')->paginate(15);
+        //$data['categories'] = Category::where('parent_id', null)->orderby('id', 'desc')->paginate(15);
+
         return view('admin.category.index')->with($data);
     }
 
     public function create(Request $request)
     {
-        return view('admin.category.category-form');
+        $categories = Category::where('parent_id', null)->orderby('id', 'desc')->get();
+        return view('admin.category.category-form', compact('categories'));
     }
 
 
@@ -28,7 +31,8 @@ class CategoryController extends Controller
         //
         $validated = $request->validate([
             'title' => 'required|max:255',
-            'status' => 'required'
+            'status' => 'required',
+            'parent_id' => 'nullable|numeric'
         ]);
 
         if (!$request->category_id) {
@@ -38,10 +42,25 @@ class CategoryController extends Controller
             $category = Category::findOrFail($request->category_id);
             $msg = "Category updated Successfully.";
         }
-       
+
         try {
+            $category->parent_id = $request->parent_id;
             $category->title = $request->title;
             $category->status = $request->status;
+            $category->slug = Str::slug($request->title, '-');
+
+            $category->meta_title = $request->meta_title;
+            $category->meta_keyword = $request->meta_keyword;
+            $category->meta_description = $request->meta_description;
+
+
+            if ($request->hasFile('image')) {
+                $name = $request->image->getClientOriginalName();
+                $filename =  date('ymdgis') . $name;
+                $request->image->move(public_path() . '/storage/category/', $filename);
+                $category->image = '/storage/category/' . $filename;
+            }
+
             $category->save();
             return redirect()->back()->with(["msg" => $msg, 'msg_type' => 'success']);
         } catch (Exception $e) {
@@ -52,12 +71,13 @@ class CategoryController extends Controller
     public function action($type, $id)
     {
         if (!in_array($type, ['edit', 'delete', 'status']))
-        return redirect()->back()->with(['message' => 'Invalid Action']);
+            return redirect()->back()->with(['message' => 'Invalid Action']);
 
         $category = Category::findOrFail($id);
 
         if ($type == "edit") {
-            return view('admin.category.category-form', compact('category'));
+            $categories = Category::where('parent_id', null)->orderby('id', 'desc')->get();
+            return view('admin.category.category-form', compact('category', 'categories'));
         }
         if ($type == "delete") {
             $delData = Category::where('id', $id)->delete();

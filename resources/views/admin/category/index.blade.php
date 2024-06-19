@@ -1,6 +1,6 @@
 @extends('layouts.admin_layout')
 @section('content')
-@section('title', 'Objective List')
+@section('title', 'Category List')
 
 <style>
     .live-preview svg {
@@ -29,9 +29,9 @@
                 <div class="col-xl-12">
                     <div class="card">
                         <div class="card-header align-items-center d-flex">
-                            <h4 class="card-title mb-0 flex-grow-1">Objective List</h4>
+                            <h4 class="card-title mb-0 flex-grow-1">Category List</h4>
                             <div class="flex-shrink-0">
-                                <a href="{{url('admin/category/create')}}" class="btn btn-info">Add Objective</a>
+                                <a href="{{url('admin/category/create')}}" class="btn btn-info">Add Category</a>
                             </div>
                         </div><!-- end card header -->
 
@@ -43,7 +43,9 @@
                                         <thead class="table-light">
                                             <tr>
                                                 <th scope="col">S.No</th>
+                                                <th scope="col">Image</th>
                                                 <th scope="col">Title</th>
+                                                <th>Parent</th>
                                                 <th scope="col">Status</th>
                                                 <th scope="col">Action</th>
                                             </tr>
@@ -54,7 +56,12 @@
                                             @forelse($categories as $key=>$row)
                                             <tr row_id="{{$row->id}}" class="get_row_{{$row->id}}">
                                                 <td>{{$key+1+($categories->currentPage()-1) * ($categories->perPage())}}</td>
+                                                <td>@if($row->image)<img src="{{url($row->image)}}" height="50" width="auto" style="max-width:100px">@endif</td>
                                                 <td>{{$row->title ?? ''}}</td>
+                                                <td>@if($row->parent)
+                                                    {{$row->parent->title}}
+                                                    @endif
+                                                </td>
                                                 <td>@if($row->status == 1) <button type="button" class="btn btn-sm btn-light"> Active</button> @else <button type="button" class="btn btn-sm btn-light"> Inactive</button> @endif</td>
                                                 <td>
                                                     <a class="btn btn-info btn-sm waves-effect waves-light" href="{{url('admin/category/edit/'.$row->id)}}">
@@ -67,7 +74,7 @@
                                             </tr>
                                             @empty
                                             <tr>
-                                               <td colspan="5">Data not found</td> 
+                                                <td colspan="5">Data not found</td>
                                             </tr>
                                             @endif
 
@@ -118,7 +125,7 @@
             var row_id = $('.get_row_id').val();
             //alert(row_id);
             var csrf_token = $('input[name="csrf_token"]').val();
-            var getUrl = window.location.href+'/delete/' + row_id;
+            var getUrl = window.location.href + '/delete/' + row_id;
             $.ajax({
                 url: getUrl,
                 method: "get",

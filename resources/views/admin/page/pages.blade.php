@@ -56,7 +56,7 @@
                                             @foreach($pages as $key=>$row)
                                             <tr row_id="{{$row->id}}" class="get_row_{{$row->id}}">
                                                 <td>{{$key+1+($pages->currentPage()-1) * ($pages->perPage())}}</td>
-                                                <td>{{$row->title}}</td>
+                                                <td><a href="{{url('admin/page-section?pid='.$page->id)}}">{{$row->title}} </a></td>
                                                 <td>@if($row->status == 1) <button type="button" class="btn btn-sm btn-light"> Active</button> @else <button type="button" class="btn btn-sm btn-light"> Inactive</button> @endif</td>
                                                 <td>
                                                     <a class="btn btn-info btn-sm waves-effect waves-light" href="{{url('auth/page/edit/'.$row->id)}}">

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Banner;
+use App\Helpers\Helper;
 use Exception;
 use File;
 
@@ -37,12 +38,16 @@ class BannerController extends Controller
             $msg = "Banner updated Successfully.";
         }
         try {
-            $banner->type = 'home';
+            $banner->type = $request->type;
             $banner->title = $request->title;
+            $banner->title2 = $request->title2;
+            $banner->title3 = $request->title3;
+            $banner->desc1 = $request->desc1;
+            $banner->desc2 = $request->desc2;
 
             if ($request->hasFile('image')) {
                 $name = $request->image->getClientOriginalName();
-                $filename =  date('ymdgis') . $name;
+                $filename =  date('ymdgis') .  Helper::cleanString($name);
                 $request->image->move(public_path() . '/storage/banner/', $filename);
                 $banner->image = '/storage/banner/' . $filename;
             }

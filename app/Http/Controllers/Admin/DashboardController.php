@@ -8,10 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use App\Models\User;
-use App\Models\Job;
-use App\Models\Booking;
-use App\Models\Slot;
-use App\Models\TimeSlot;
+use App\Models\Order;
 use App\Models\Admin;
 use App\Models\Setting;
 use Hash;
@@ -21,72 +18,15 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
         $data['user_count'] = User::count();
-        $data['job_count'] = Job::count();
-        $data['slot_count'] = TimeSlot::count();
-        $data['booking_count'] = Booking::count();
+        $data['job_count'] = 0;
+        $data['slot_count'] = 0;
+        $data['order_count'] = Order::count();
         $data['users'] = User::where('status', 1)->orderBy('id', 'desc')->take('12')->get();
         $data['subscribers'] = [];
         $data['month'] = date('m');
         $data['month_year'] = date('Y');
         $data['month_dates'] = cal_days_in_month(CAL_GREGORIAN, $data['month'], $data['month_year']);
 
-        $jobs = Job::whereNotIn('id', function($query){
-            $query->select('job_id')
-            ->from(with(new Booking)->getTable())
-            ->where('status', 1);
-        })->get()->toArray();
-
-        ///dd($jobs);
-
-        $job_array = [];
-        foreach($jobs as $job)
-        {
-            $job['title'] = 'Job: '. $job['title'] . "\n" .' Time: '. $job['time_from']. ' - '.$job['time_to'];
-           // dd($job['id']);
-            unset($job['id']);
-            unset($job['facility']);
-            unset($job['position']);
-            unset($job['location']);
-            unset($job['time_from']);
-            unset($job['time_to']);
-            unset($job['descriptions']);
-            unset($job['slug']);
-            unset($job['status']);
-            unset($job['created_at']);
-            unset($job['updated_at']);
-            $job['color'] = 'white';
-            $job['backgroundColor'] = 'blue';
-            $job_array[] = $job;
-        }
-
-    
-        
-        
-        $booking = Booking::select('booking.id as booking_id','booking.*','jobs.title','jobs.time_from','jobs.time_to','jobs.id','users.id','users.first_name','users.last_name')->leftJoin('jobs','jobs.id','booking.job_id')->leftJoin('users','users.id','booking.user_id')->get()->toArray();
-        $booking_array = [];
-        foreach($booking as $book)
-        {
-            $book['date'] = date('Y-m-d', strtotime($book['created_at']));
-            $book['title'] = 'Job: '. $book['title']. ',  User:'. $book['first_name']. ' '. $book['last_name']. "\n" . ' Time: '. $book['time_from']. ' - '.$book['time_to'];
-            unset( $book['id']);
-            unset( $book['booking_id']);
-            unset( $book['user_id']);
-            unset( $book['job_id']);
-            unset( $book['status']);
-            unset( $book['created_at']);
-            unset( $book['updated_at']);
-            //unset( $book->title);
-            unset( $book['first_name']);
-            unset( $book['last_name']);
-            $book['color'] = 'white';
-            $book['backgroundColor'] = 'green';
-            $booking_array[] = $book;
-        }
-        //dd($booking);
-
-        $data['events'] = array_merge_recursive($job_array,$booking_array);
-
-        //dd($data['events']);
        
         return view('admin.dashboard.dashboard')->with($data);
     }

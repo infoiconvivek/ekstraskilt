@@ -8,13 +8,29 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\CmsController;
 use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\VaccineController;
-use App\Http\Controllers\Admin\JobController;
-use App\Http\Controllers\Admin\SlotController;
-use App\Http\Controllers\Admin\BookingController as AdminBookingController;
-use App\Http\Controllers\Admin\UserProvidedController;
-use App\Http\Controllers\Admin\PositionController;
-use App\Http\Controllers\Admin\FacilityController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\FaqController;
+use App\Http\Controllers\Admin\PartnerController;
+use App\Http\Controllers\Admin\TestimonialController;
+use App\Http\Controllers\Admin\EnquiryController;
+use App\Http\Controllers\Admin\SubscriberController;
+use App\Http\Controllers\Admin\MaterialeController;
+use App\Http\Controllers\Admin\StorrelseController;
+use App\Http\Controllers\Admin\FormController;
+use App\Http\Controllers\Admin\FestemetodeController;
+use App\Http\Controllers\Admin\RammeController;
+use App\Http\Controllers\Admin\BildeController;
+use App\Http\Controllers\Admin\BlogController;
+use App\Http\Controllers\Admin\MenuController;
+use App\Http\Controllers\Admin\DesignController;
+use App\Http\Controllers\Admin\DesignGalleryController;
+use App\Http\Controllers\Admin\DesignCategoryController;
+use App\Http\Controllers\Admin\AttributeController;
+use App\Http\Controllers\Admin\AttributeValueController;
+use App\Http\Controllers\Admin\ProductAttributeController;
+use App\Http\Controllers\Admin\VariationController;
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
+use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
 
 
 /*
@@ -46,20 +62,23 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('/', [DashboardController::class, 'index']);
         });
 
-        Route::group(['prefix' => 'booking'], function () {
-            Route::get('/', [AdminBookingController::class, 'index']);
-            Route::get('view/{booking_id}', [AdminBookingController::class, 'view']);
+        Route::group(['prefix' => 'order'], function () {
+            Route::get('/', [AdminOrderController::class, 'index']);
+            Route::get('view/{order_id}', [AdminOrderController::class, 'view']);
         });
+
+        Route::group(['prefix' => 'payment'], function () {
+            Route::get('/', [AdminPaymentController::class, 'index']);
+            Route::get('view/{payment_id}', [AdminPaymentController::class, 'view']);
+        });
+
 
         Route::group(['prefix' => 'user'], function () {
             Route::get('/', [UserController::class, 'index']);
             Route::get('create', [UserController::class, 'create']);
             Route::post('save', [UserController::class, 'save']);
-            Route::get('slots/{id}', [UserController::class, 'slots']);
-            Route::get('timesheets/{id}', [UserController::class, 'timesheets']);
             Route::get('{type}/{id}', [UserController::class, 'action']);
         });
-
 
         Route::group(['prefix' => 'banner'], function () {
             Route::get('/', [BannerController::class, 'index']);
@@ -82,14 +101,51 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('{type}/{id}', [CmsController::class, 'sectionAction']);
         });
 
-
-
-        Route::group(['prefix' => 'job'], function () {
-            Route::get('/', [JobController::class, 'index']);
-            Route::get('create', [JobController::class, 'create']);
-            Route::post('save', [JobController::class, 'save']);
-            Route::get('{type}/{id}', [JobController::class, 'action']);
+        Route::group(['prefix' => 'faq'], function () {
+            Route::get('/', [FaqController::class, 'index']);
+            Route::get('create', [FaqController::class, 'create']);
+            Route::post('save', [FaqController::class, 'save']);
+            Route::get('{type}/{id}', [FaqController::class, 'action']);
         });
+
+        Route::group(['prefix' => 'menu'], function () {
+            Route::get('/', [MenuController::class, 'index']);
+            Route::get('create', [MenuController::class, 'create']);
+            Route::post('save', [MenuController::class, 'save']);
+            Route::get('{type}/{id}', [MenuController::class, 'action']);
+        });
+
+        Route::group(['prefix' => 'blog'], function () {
+            Route::get('/', [BlogController::class, 'index']);
+            Route::get('create', [BlogController::class, 'create']);
+            Route::post('save', [BlogController::class, 'save']);
+            Route::get('{type}/{id}', [BlogController::class, 'action']);
+        });
+
+        Route::group(['prefix' => 'partner'], function () {
+            Route::get('/', [PartnerController::class, 'index']);
+            Route::get('create', [PartnerController::class, 'create']);
+            Route::post('save', [PartnerController::class, 'save']);
+            Route::get('{type}/{id}', [PartnerController::class, 'action']);
+        });
+
+        Route::group(['prefix' => 'testimonial'], function () {
+            Route::get('/', [TestimonialController::class, 'index']);
+            Route::get('create', [TestimonialController::class, 'create']);
+            Route::post('save', [TestimonialController::class, 'save']);
+            Route::get('{type}/{id}', [TestimonialController::class, 'action']);
+        });
+
+        Route::group(['prefix' => 'enquiry'], function () {
+            Route::get('/', [EnquiryController::class, 'index']);
+            Route::get('{type}/{id}', [EnquiryController::class, 'action']);
+        });
+
+        Route::group(['prefix' => 'subscriber'], function () {
+            Route::get('/', [SubscriberController::class, 'index']);
+            Route::get('{type}/{id}', [SubscriberController::class, 'action']);
+        });
+
 
         Route::group(['prefix' => 'category'], function () {
             Route::get('/', [CategoryController::class, 'index']);
@@ -98,46 +154,119 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('{type}/{id}', [CategoryController::class, 'action']);
         });
 
-        Route::group(['prefix' => 'provided'], function () {
-            Route::get('/', [UserProvidedController::class, 'index']);
-            Route::get('create', [UserProvidedController::class, 'create']);
-            Route::post('save', [UserProvidedController::class, 'save']);
-            Route::get('{type}/{id}', [UserProvidedController::class, 'action']);
+        Route::group(['prefix' => 'attribute'], function () {
+            Route::get('/', [AttributeController::class, 'index']);
+            Route::get('create', [AttributeController::class, 'create']);
+            Route::post('save', [AttributeController::class, 'save']);
+            Route::get('{type}/{id}', [AttributeController::class, 'action']);
+        });
+
+        Route::get('get-attribute-values/{attribute_id}', [ProductController::class, 'getAttributeVal']);
+        
+        Route::group(['prefix' => 'attribute-value'], function () {
+            Route::get('/', [AttributeValueController::class, 'index']);
+            Route::get('create', [AttributeValueController::class, 'create']);
+            Route::post('save', [AttributeValueController::class, 'save']);
+            Route::get('{type}/{id}', [AttributeValueController::class, 'action']);
         });
 
 
-        Route::group(['prefix' => 'position'], function () {
-            Route::get('/', [PositionController::class, 'index']);
-            Route::get('create', [PositionController::class, 'create']);
-            Route::post('save', [PositionController::class, 'save']);
-            Route::get('{type}/{id}', [PositionController::class, 'action']);
-        });
-
-        Route::group(['prefix' => 'facility'], function () {
-            Route::get('/', [FacilityController::class, 'index']);
-            Route::get('create', [FacilityController::class, 'create']);
-            Route::post('save', [FacilityController::class, 'save']);
-            Route::get('{type}/{id}', [FacilityController::class, 'action']);
-        });
-
-        Route::group(['prefix' => 'vaccine'], function () {
-            Route::get('/', [VaccineController::class, 'index']);
-            Route::get('create', [VaccineController::class, 'create']);
-            Route::post('save', [VaccineController::class, 'save']);
-            Route::get('{type}/{id}', [VaccineController::class, 'action']);
+        Route::group(['prefix' => 'product-attribute'], function () {
+            Route::get('/', [ProductAttributeController::class, 'index']);
+            Route::get('create', [ProductAttributeController::class, 'create']);
+            Route::post('save', [ProductAttributeController::class, 'save']);
+            Route::get('{type}/{id}', [ProductAttributeController::class, 'action']);
         });
 
 
+        Route::group(['prefix' => 'variation'], function () {
+            Route::get('/', [VariationController::class, 'index']);
+            Route::get('create', [VariationController::class, 'create']);
+            Route::post('save', [VariationController::class, 'save']);
+            Route::get('{type}/{id}', [VariationController::class, 'action']);
+        });
 
-        Route::group(['prefix' => 'slot'], function () {
-            Route::get('/', [SlotController::class, 'index']);
-            Route::get('create', [SlotController::class, 'create']);
-            Route::post('save', [SlotController::class, 'save']);
-            Route::get('{type}/{id}', [SlotController::class, 'action']);
+        Route::group(['prefix' => 'product'], function () {
+            Route::get('/', [ProductController::class, 'index']);
+            Route::get('create', [ProductController::class, 'create']);
+            Route::post('save', [ProductController::class, 'save']);
+            Route::post('generate-variations', [ProductController::class, 'generateVariations']);
+            Route::get('delete-data/{type}', [ProductController::class, 'deleteData']);
+            Route::get('{type}/{id}', [ProductController::class, 'action']);
+        });
+
+        Route::group(['prefix' => 'design'], function () {
+            Route::get('/', [DesignController::class, 'index']);
+            Route::get('create', [DesignController::class, 'create']);
+            Route::post('save', [DesignController::class, 'save']);
+            Route::get('tool/{id}', [DesignController::class, 'tool']);
+            Route::get('get-tool-images/{id}', [DesignController::class, 'getToolImages']);
+            Route::get('get-tool-bg-images/{id}', [DesignController::class, 'getToolBgImages']);
+            Route::post('tool-save', [DesignController::class, 'toolSave']);
+            Route::get('{type}/{id}', [DesignController::class, 'action']);
+        });
+
+        Route::group(['prefix' => 'design-category'], function () {
+            Route::get('/', [DesignCategoryController::class, 'index']);
+            Route::get('create', [DesignCategoryController::class, 'create']);
+            Route::post('save', [DesignCategoryController::class, 'save']);
+            Route::get('{type}/{id}', [DesignCategoryController::class, 'action']);
+        });
+
+        Route::group(['prefix' => 'design-gallery'], function () {
+            Route::get('/', [DesignGalleryController::class, 'index']);
+            Route::get('create', [DesignGalleryController::class, 'create']);
+            Route::post('save', [DesignGalleryController::class, 'save']);
+            Route::get('get-design-category/{id}', [DesignGalleryController::class, 'getCategory']);
+            Route::get('{type}/{id}', [DesignGalleryController::class, 'action']);
+        });
+ 
+
+        Route::group(['prefix' => 'materiale'], function () {
+            Route::get('/', [MaterialeController::class, 'index']);
+            Route::get('create', [MaterialeController::class, 'create']);
+            Route::post('save', [MaterialeController::class, 'save']);
+            Route::get('{type}/{id}', [MaterialeController::class, 'action']);
+        });
+
+        Route::group(['prefix' => 'storrelse'], function () {
+            Route::get('/', [StorrelseController::class, 'index']);
+            Route::get('create', [StorrelseController::class, 'create']);
+            Route::post('save', [StorrelseController::class, 'save']);
+            Route::get('{type}/{id}', [StorrelseController::class, 'action']);
         });
 
 
+        Route::group(['prefix' => 'form'], function () {
+            Route::get('/', [FormController::class, 'index']);
+            Route::get('create', [FormController::class, 'create']);
+            Route::post('save', [FormController::class, 'save']);
+            Route::get('{type}/{id}', [FormController::class, 'action']);
+        });
 
+        Route::group(['prefix' => 'festemetode'], function () {
+            Route::get('/', [FestemetodeController::class, 'index']);
+            Route::get('create', [FestemetodeController::class, 'create']);
+            Route::post('save', [FestemetodeController::class, 'save']);
+            Route::get('{type}/{id}', [FestemetodeController::class, 'action']);
+        });
+
+        Route::group(['prefix' => 'ramme'], function () {
+            Route::get('/', [RammeController::class, 'index']);
+            Route::get('create', [RammeController::class, 'create']);
+            Route::post('save', [RammeController::class, 'save']);
+            Route::get('{type}/{id}', [RammeController::class, 'action']);
+        });
+
+            Route::group(['prefix' => 'bilde'], function () {
+            Route::get('/', [BildeController::class, 'index']);
+            Route::get('create', [BildeController::class, 'create']);
+            Route::post('save', [BildeController::class, 'save']);
+            Route::get('{type}/{id}', [BildeController::class, 'action']);
+        });
+
+       
+       
         Route::get('setting', [DashboardController::class, 'setting']);
         Route::post('profile-update', [DashboardController::class, 'updateProfile']);
         Route::post('save-profile-image', [DashboardController::class, 'saveProfileImage']);

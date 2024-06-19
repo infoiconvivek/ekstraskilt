@@ -46,7 +46,7 @@
                         <div class="text-center mt-sm-5 mb-4 text-white-50">
                             <div>
                                 <a href="{{url('/')}}" class="d-inline-block auth-logo">
-                                    <img src="{{URL::asset('admin/images/logo.png')}}" alt="" height="20">
+                                    <img src="{{URL::asset('admin/images/logo.png')}}" alt="">
                                 </a>
                             </div>
                             <p class="mt-3 fs-15 fw-medium">{{env('SITE_NAME')}} Admin Dashboard</p>
@@ -144,7 +144,7 @@
                     <div class="col-lg-12">
                         <div class="text-center">
                             <p class="mb-0 text-muted">&copy;
-                                Copyright © {{now()->year}} dioraa.com
+                                Copyright © {{now()->year}} {{env('SITE_URL')}}
                             </p>
                         </div>
                     </div>

@@ -2,9 +2,212 @@
 /*# sourceMappingURL=custom.min.css.map */
 
 .hidden.sm\:flex-1.sm\:flex.sm\:items-center.sm\:justify-between {
-    margin-top: 20px !important;
+  margin-top: 20px !important;
 }
 
 .flex.justify-between.flex-1.sm\:hidden {
-    display: none !important;
+  display: none !important;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+  background-color: #139183;
+}
+
+button.nav-link span {
+  display: block;
+}
+
+/* toogle button */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 20px;
+}
+
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 0px;
+  bottom: 0px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #139183;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #139183;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.sidebar button.nav-link i {
+  font-size: 24px;
+}
+
+.sidebar button.nav-link span {
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.sidebar button.nav-link {
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.sidebar button.nav-link:not(:first-child) {
+  margin-top: 25px;
+}
+
+.sidebar .tab-content {
+  border-left: 1px solid #e3e3e3;
+  padding-left: 20px;
+  /* padding-right: 23px; */
+}
+
+.cat .thumb {
+  display: inline-block;
+}
+
+.cat .thumb img {
+  width: 80px;
+  height: 70px;
+  margin: 0 4px 10px 0;
+}
+
+
+canvas#designCanvas {
+  background: #fff;
+  position: relative;
+}
+
+.jainul-hw{
+  position: relative;
+}
+
+.jainul-hw .card-body{
+  overflow: auto;
+}
+.title-ab {
+   display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.title--right-line::after {
+  content: "";
+  background-color: rgba(0, 0, 0, 0.2);
+  height: 1px;
+  width: 100%;
+  margin-left: 1rem;
+}
+
+.title--center-line {
+  text-align: center;
+    margin-bottom: -20px;
+    position: absolute;
+    width: 100%;
+    bottom: 0px;
+}
+.title--center-line::before {
+  content: "";
+  background-color: rgba(0, 0, 0, 0.2);
+  height: 1px;
+  width: 100%;
+  margin-right: 1rem;
+}
+.title--center-line::after {
+  content: "";
+  background-color: rgba(0, 0, 0, 0.2);
+  height: 1px;
+  width: 100%;
+  margin-left: 1rem;
+}
+
+.title--left-line::before {
+  content: "";
+  background-color: rgba(0, 0, 0, 0.2);
+  height: 1px;
+  width: 100%;
+  margin-right: 1rem;
+}
+
+/* ver */
+
+.title-hb {
+  display: flex;
+ align-items: center;
+ white-space: nowrap;
+ flex-direction: column;
+ align-items: center;
+}
+
+.title--right-line2::after {
+ content: "";
+ background-color: rgba(0, 0, 0, 0.2);
+ height: 100%;
+ width: 1px;
+
+}
+
+.title--center-line2 {
+  margin-left: -30px;
+  position: absolute;
+  height: 100%;
+  left: 0px;
+}
+.title--center-line2::before {
+ content: "";
+ background-color: rgba(0, 0, 0, 0.2);
+ height: 100%;
+ width: 1px;
+}
+.title--center-line2::after {
+ content: "";
+ background-color: rgba(0, 0, 0, 0.2);
+ height: 100%;
+ width: 1px;
+}
+
+.title--left-line2::before {
+ content: "";
+ background-color: rgba(0, 0, 0, 0.2);
+ height: 100%;
+ width: 1px;
 }

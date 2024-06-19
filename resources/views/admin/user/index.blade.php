@@ -31,7 +31,7 @@
                         <div class="card-header align-items-center d-flex">
                             <h4 class="card-title mb-0 flex-grow-1">User List</h4>
                             <div class="flex-shrink-0">
-                                <a href="{{url('admin/user/create')}}" class="btn btn-info">Add User</a>
+                              {{---  <a href="{{url('admin/user/create')}}" class="btn btn-info">Add User</a> ----}}
                             </div>
                         </div><!-- end card header -->
 
@@ -46,8 +46,7 @@
                                                 <th scope="col">Name</th>
                                                 <th scope="col">Email</th>
                                                 <th scope="col">Mobile</th>
-                                                <th scope="col">Status</th>
-                                                <th scope="col">Action</th>
+                                                 <th scope="col">Action</th> 
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -59,23 +58,17 @@
                                                 <td>{{$row->first_name ?? ''}} {{$row->last_name ?? ''}}</td>
                                                 <td>{{$row->email ?? ''}}</td>
                                                 <td>{{$row->phone ?? ''}}</td>
-                                                <td>@if($row->status == 1) <button type="button" class="btn btn-sm btn-light"> Active</button> @else <button type="button" class="btn btn-sm btn-light"> Inactive</button> @endif</td>
-                                                <td>
-                                                     <a class="btn btn-success btn-sm waves-effect waves-light" href="{{url('admin/user/slots/'.$row->uid)}}">
-                                                        <i class="fe fe-pencil"></i> Shift
-                                                    </a>
-
-                                                    <a class="btn btn-primary btn-sm waves-effect waves-light" href="{{url('admin/user/timesheets/'.$row->uid)}}">
-                                                        <i class="fe fe-pencil"></i> Timesheet
-                                                    </a>
-
+                                                 <td>
+                                                    
                                                     <a class="btn btn-info btn-sm waves-effect waves-light" href="{{url('admin/user/edit/'.$row->uid)}}">
-                                                        <i class="fe fe-pencil"></i> Edit
+                                                        <i class="fe fe-pencil"></i> View
                                                     </a>
+                                                   {{--- 
                                                     <a class="btn btn-danger btn-sm waves-effect waves-light deleteBtn" data-toggle="modal" href="javascript:void(0)" row_id="{{$row->uid}}">
                                                         <i class="fe fe-trash"></i> Delete
                                                     </a>
-                                                </td>
+                                                    ---}}
+                                                </td> 
                                             </tr>
                                             @empty
                                             <tr>

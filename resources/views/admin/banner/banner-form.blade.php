@@ -43,9 +43,25 @@
                                     <div class="row gy-4">
 
 
-                                        <div class="col-xxl-4 col-md-4">
+                                    <div class="col-xxl-6 col-md-6">
                                             <div>
-                                                <label for="title" class="form-label">Title</label>
+                                                <label for="name" class="form-label">Type</label>
+                                                <select name="type" class="form-control">
+                                                    <option value="" @if(isset($banner) && $banner->type == '') {{"selected"}} @endif>--Select--</option>
+                                                    <option value="home" @if(isset($banner) && $banner->type == 'home') {{"selected"}} @endif >Home</option>
+                                                </select>
+
+                                                @error('type')
+                                                <span class="text-danger">{{$message}}</span>
+                                                @enderror
+
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-xxl-6 col-md-6">
+                                            <div>
+                                                <label for="title" class="form-label">Title1</label>
                                                 <input type="text" class="form-control" name="title" value="{{ isset($banner)?$banner->title:old('title') }}">
                                             </div>
                                             @error('title')
@@ -53,9 +69,51 @@
                                             @enderror
                                         </div>
 
-                                        <div class="col-xxl-4 col-md-4">
+                                        <div class="col-xxl-6 col-md-6">
                                             <div>
-                                                <label for="image" class="form-label">Image</label>
+                                                <label for="title2" class="form-label">Title2</label>
+                                                <input type="text" class="form-control" name="title2" value="{{ isset($banner)?$banner->title2:old('title2') }}">
+                                            </div>
+                                            @error('title2')
+                                            <span class="text-danger">{{$message}}</span>
+                                            @enderror
+                                        </div>
+
+
+                                        <div class="col-xxl-6 col-md-6">
+                                            <div>
+                                                <label for="title3" class="form-label">Title3</label>
+                                                <input type="text" class="form-control" name="title3" value="{{ isset($banner)?$banner->title3:old('title3') }}">
+                                            </div>
+                                            @error('title3')
+                                            <span class="text-danger">{{$message}}</span>
+                                            @enderror
+                                        </div>
+
+                                        <div class="col-xxl-12 col-md-12">
+                                            <div>
+                                                <label for="desc1" class="form-label">Description1</label>
+                                                <textarea class="form-control" name="desc1">{{ isset($banner)?$banner->desc1:old('desc1') }} </textarea>
+                                            </div>
+                                            @error('desc1')
+                                            <span class="text-danger">{{$message}}</span>
+                                            @enderror
+                                        </div>
+
+
+                                        <div class="col-xxl-12 col-md-12">
+                                            <div>
+                                                <label for="desc2" class="form-label">Description2</label>
+                                                <textarea class="form-control" name="desc2">{{ isset($banner)?$banner->desc2:old('desc2') }} </textarea>
+                                            </div>
+                                            @error('desc2')
+                                            <span class="text-danger">{{$message}}</span>
+                                            @enderror
+                                        </div>
+
+                                        <div class="col-xxl-6 col-md-6">
+                                            <div>
+                                                <label for="image" class="form-label">Image/Video</label>
                                                 <input type="file" class="form-control" name="image">
                                             </div>
                                             @error('image')
@@ -63,7 +121,7 @@
                                             @enderror
                                         </div>
 
-                                        <div class="col-xxl-4 col-md-4">
+                                        <div class="col-xxl-6 col-md-6">
                                             <div>
                                                 <label for="name" class="form-label">Status</label>
                                                 <select name="status" class="form-control">

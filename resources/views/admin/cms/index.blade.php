@@ -44,7 +44,6 @@
                                             <tr>
                                                 <th scope="col">S.No</th>
                                                 <th scope="col">Title</th>
-                                                <th scope="col">Image</th>
                                                 <th scope="col">Status</th>
                                                 <th scope="col">Action</th>
                                             </tr>
@@ -55,16 +54,19 @@
                                             @forelse($pages as $key=>$row)
                                             <tr row_id="{{$row->id}}" class="get_row_{{$row->id}}">
                                                 <td>{{$key+1+($pages->currentPage()-1) * ($pages->perPage())}}</td>
-                                                <td>{{$row->title ?? ''}}</td>
-                                                <td><img src="{{URL::asset($row->image)}}" style="height: 80px; width: 80px;"></td>
+                                                <td><a href="{{url('admin/page-section?pid='.$row->id)}}">{{$row->title}} </a></td>
                                                 <td>@if($row->status == 1) <button type="button" class="btn btn-sm btn-light"> Active</button> @else <button type="button" class="btn btn-sm btn-light"> Inactive</button> @endif</td>
                                                 <td>
+                                                <a class="btn btn-success btn-sm waves-effect waves-light" href="{{url('admin/page-section?pid='.$row->id)}}">
+                                                        <i class="fe fe-pencil"></i> View Page Section
+                                                    </a>
                                                     <a class="btn btn-info btn-sm waves-effect waves-light" href="{{url('admin/page/edit/'.$row->id)}}">
                                                         <i class="fe fe-pencil"></i> Edit
                                                     </a>
-                                                    <a class="btn btn-danger btn-sm waves-effect waves-light deleteBtn" data-toggle="modal" href="javascript:void(0)" row_id="{{$row->id}}">
+                                                   {{--- <a class="btn btn-danger btn-sm waves-effect waves-light deleteBtn" data-toggle="modal" href="javascript:void(0)" row_id="{{$row->id}}">
                                                         <i class="fe fe-trash"></i> Delete
                                                     </a>
+                                                    ---}}
                                                 </td>
                                             </tr>
                                             @empty

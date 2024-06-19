@@ -1,7 +1,14 @@
 /*
-Template Name: Velzon - Admin & Dashboard Template
-Author: Themesbrand
-Website: https://themesbrand.com/
-Contact: support@themesbrand.com
+
 File: Custom Css File
 */
+
+
+
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+    background-color: #139183;
+}
+
+button.nav-link span {
+    display: block;
+}

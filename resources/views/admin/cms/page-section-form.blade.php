@@ -42,7 +42,22 @@
                                     @csrf
                                     <div class="row gy-4">
 
-                            
+                                    <div class="col-xxl-6 col-md-6">
+                                            <div>
+                                                <label for="name" class="form-label">Page</label>
+                                                <select name="page_id" class="form-control">
+                                                    <option value="" @if(isset($section) && $section->status == '') {{"selected"}} @endif>--Select--</option>
+                                                    @foreach($pages as $page)
+                                                    <option value="{{$page->id}}" @if(isset($section) && $section->page_id == $page->id) {{"selected"}} @endif>{{$page->title}}</option>
+                                                    @endforeach
+                                                </select>
+
+                                                @error('status')
+                                                <span class="text-danger">{{$message}}</span>
+                                                @enderror
+
+                                            </div>
+                                        </div>
 
                                         <div class="col-xxl-6 col-md-6">
                                             <div>

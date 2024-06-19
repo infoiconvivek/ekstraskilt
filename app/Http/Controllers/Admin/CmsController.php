@@ -14,7 +14,7 @@ class CmsController extends Controller
 {
     public function index(Request $request)
     {
-        $data['pages'] = Page::orderBy('id','desc')->paginate(15);
+        $data['pages'] = Page::orderBy('id','asc')->paginate(15);
         return view('admin.cms.index')->with($data);
     }
 
@@ -91,13 +91,15 @@ class CmsController extends Controller
 
     public function sectionIndex(Request $request)
     {
-        $data['sections'] = PageSection::orderBy('id','desc')->paginate(15);
+        ///$page_id = $request->pid;
+        $data['sections'] = PageSection::orderBy('id','desc')->where('page_id',$request->pid)->paginate(25);
         return view('admin.cms.page-section')->with($data);
     }
 
     public function sectionCreate(Request $request)
     {
-        return view('admin.cms.page-section-form');
+        $pages = Page::where('status',1)->get();
+        return view('admin.cms.page-section-form',compact('pages'));
     }
 
 
@@ -118,6 +120,7 @@ class CmsController extends Controller
         }
        
         try {
+            $pageSection->page_id = $request->page_id;
             $pageSection->title = $request->title;
             $pageSection->sub_title = $request->sub_title;
             $pageSection->descriptions = $request->descriptions;
@@ -146,7 +149,8 @@ class CmsController extends Controller
         $section = PageSection::findOrFail($id);
 
         if ($type == "edit") {
-            return view('admin.cms.page-section-form', compact('section'));
+            $pages = Page::where('status',1)->get();
+            return view('admin.cms.page-section-form', compact('section','pages'));
         }
         if ($type == "delete") {
             if (\File::exists(public_path($section->image))) {
