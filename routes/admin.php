@@ -162,7 +162,7 @@ Route::group(['prefix' => 'admin'], function () {
         });
 
         Route::get('get-attribute-values/{attribute_id}', [ProductController::class, 'getAttributeVal']);
-        
+
         Route::group(['prefix' => 'attribute-value'], function () {
             Route::get('/', [AttributeValueController::class, 'index']);
             Route::get('create', [AttributeValueController::class, 'create']);
@@ -190,7 +190,7 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('/', [ProductController::class, 'index']);
             Route::get('create', [ProductController::class, 'create']);
             Route::post('save', [ProductController::class, 'save']);
-            Route::post('generate-variations', [ProductController::class, 'generateVariations']);
+            Route::post('generate-variations', [ProductController::class, 'generateVariations'])->name('products.generateVariations');
             Route::get('delete-data/{type}', [ProductController::class, 'deleteData']);
             Route::get('{type}/{id}', [ProductController::class, 'action']);
         });
@@ -220,7 +220,7 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('get-design-category/{id}', [DesignGalleryController::class, 'getCategory']);
             Route::get('{type}/{id}', [DesignGalleryController::class, 'action']);
         });
- 
+
 
         Route::group(['prefix' => 'materiale'], function () {
             Route::get('/', [MaterialeController::class, 'index']);
@@ -258,15 +258,15 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('{type}/{id}', [RammeController::class, 'action']);
         });
 
-            Route::group(['prefix' => 'bilde'], function () {
+        Route::group(['prefix' => 'bilde'], function () {
             Route::get('/', [BildeController::class, 'index']);
             Route::get('create', [BildeController::class, 'create']);
             Route::post('save', [BildeController::class, 'save']);
             Route::get('{type}/{id}', [BildeController::class, 'action']);
         });
 
-       
-       
+
+
         Route::get('setting', [DashboardController::class, 'setting']);
         Route::post('profile-update', [DashboardController::class, 'updateProfile']);
         Route::post('save-profile-image', [DashboardController::class, 'saveProfileImage']);

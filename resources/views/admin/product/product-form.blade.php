@@ -56,7 +56,7 @@
 
                                     <li class="nav-item" role="presentation">
                                         <a class="nav-link" data-bs-toggle="tab" href="#variants" role="tab" aria-selected="false" tabindex="-1">
-                                        Variants
+                                            Variants
                                         </a>
                                     </li>
 
@@ -272,6 +272,32 @@
                                             </div>
                                             @endif
 
+                                            <!-- end attributes-->
+
+                                            <div id="attributes-section">
+                                                @foreach ($attributes as $attribute)
+                                                <div>
+                                                    <h3>{{ $attribute->name }}</h3>
+                                                    @foreach ($attribute->values as $value)
+                                                    <label>
+                                                        <input type="checkbox" name="attributes[{{ $attribute->id }}][]" value="{{ $value->id }}">
+                                                        {{ $value->value }}
+                                                    </label>
+                                                    @endforeach
+                                                </div>
+                                                @endforeach
+                                            </div>
+                                            <button type="button" onclick="generateVariations()">Generate Variations</button>
+                                            <div id="variations-section">
+                                                @foreach ($variations as $variation)
+                                                <div class="variation">
+                                                    <input type="text" name="variations[][sku]" value="{{ $variation->sku }}" placeholder="SKU">
+                                                    <input type="number" name="variations[][price]" value="{{ $variation->price }}" placeholder="Price">
+                                                    <input type="hidden" name="variations[][attributes]" value="{{ $variation->attributes }}">
+                                                </div>
+                                                @endforeach
+                                            </div>
+                                            <!-- end attributes-->
 
                                         </div>
                                     </div>
@@ -279,29 +305,29 @@
                                     <div class="tab-pane show" id="variants" role="tabpanel">
                                         <div class="row gy-4">
 
-                                        @if(isset($product))
-                                        @foreach($variat_attributes as $key=>$attributeData)
+                                            @if(isset($product))
+                                            @foreach($variat_attributes as $key=>$attributeData)
                                             <div class="col-xxl-3 col-md-3">
-                                            <label for="price" class="form-label">Attribute-{{$key+1}}</label>
-                                            <select class="form-control">
-                                             <option value="">{{$attributeData->attribute->name ?? ''}} </option>
-                                             @php 
-                                              $attr_values = App\Helpers\Helper::getPrdctAttrValus($attributeData->attribute_id);
-                                             @endphp
-                                             @foreach($attr_values as $attr_value)
-                                             <option value="{{$attr_value->value}}">{{$attr_value->value}}</option>
-                                             @endforeach
-                                            </select>
-                                               
-                                            </div>  
-                                            
-                                            @endforeach 
+                                                <label for="price" class="form-label">Attribute-{{$key+1}}</label>
+                                                <select class="form-control">
+                                                    <option value="">{{$attributeData->attribute->name ?? ''}} </option>
+                                                    @php
+                                                    $attr_values = App\Helpers\Helper::getPrdctAttrValus($attributeData->attribute_id);
+                                                    @endphp
+                                                    @foreach($attr_values as $attr_value)
+                                                    <option value="{{$attr_value->value}}">{{$attr_value->value}}</option>
+                                                    @endforeach
+                                                </select>
+
+                                            </div>
+
+                                            @endforeach
                                             <div class="col-xxl-3 col-md-3">
-                                                 <div>
+                                                <div>
                                                     <label for="price" class="form-label">Price</label>
                                                     <input type="text" class="form-control" name="price">
                                                 </div>
-                                                </div>
+                                            </div>
                                             @endif
 
                                         </div>
@@ -465,25 +491,25 @@
 <!-- END layout-wrapper -->
 
 <script>
-  $('#generateVariationsBtn').on('click', function() {
-            $.ajax({
-                url: 'http://165.232.130.162/ekstraskilt/admin/product/generate-variations',
-                type: 'POST',
-                data: {
-                    attributes: attributes,
-                    price: $('input[name="price"]').val(),
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function(response) {
-                    let variationsHtml = '';
-                    response.variations.forEach(variation => {
-                        variationsHtml += `<div>${JSON.stringify(variation.attributes)} - ${variation.price}</div>`;
-                    });
-                    $('#variations').html(variationsHtml);
-                }
-            });
+    /*$('#generateVariationsBtn').on('click', function() {
+        $.ajax({
+            url: 'http://165.232.130.162/ekstraskilt/admin/product/generate-variations',
+            type: 'POST',
+            data: {
+                attributes: attributes,
+                price: $('input[name="price"]').val(),
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                let variationsHtml = '';
+                response.variations.forEach(variation => {
+                    variationsHtml += `<div>${JSON.stringify(variation.attributes)} - ${variation.price}</div>`;
+                });
+                $('#variations').html(variationsHtml);
+            }
         });
- </script>   
+    });*/
+</script>
 
 <script>
     $('#attribute-list').on('change', function() {
@@ -510,5 +536,53 @@
 <script>
     CKEDITOR.replace('short_description');
 </script>
+
+<script>
+    const attributesData = @json($attributes);
+    console.log(attributesData);
+    function generateVariations() {
+        console.log('first');
+        const attributes = {};
+
+        attributesData.forEach(attribute => {
+            const values = [];
+            document.querySelectorAll(`input[name="attributes[${attribute.id}][]"]:checked`).forEach(input => {
+                values.push(input.value);
+            });
+            if (values.length) {
+                attributes[attribute.id] = values;
+            }
+        });
+
+        console.log(attributes);
+
+        fetch("{{ route('products.generateVariations') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    attributes
+                })
+            })
+            .then(response => response.json())
+            .then(combinations => {
+                const container = document.getElementById('variations-section');
+                container.innerHTML = '';
+                combinations.forEach(combination => {
+                    const div = document.createElement('div');
+                    div.className = 'variation';
+                    div.innerHTML = `
+                        <input type="text" name="variations[][sku]" placeholder="SKU">
+                        <input type="number" name="variations[][price]" placeholder="Price">
+                        <input type="hidden" name="variations[][attributes]" value='${JSON.stringify(combination)}'>
+                    `;
+                    container.appendChild(div);
+                });
+            });
+    }
+</script>
+
 
 @stop
