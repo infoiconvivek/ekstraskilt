@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ProductVariant extends Model
+class ProductVariation extends Model
 {
     use HasFactory;
-    protected $table = 'product_variants';
+    protected $table = 'product_variations';
     protected $fillable = array('*');
 
     public function product()
@@ -25,5 +25,4 @@ class ProductVariant extends Model
     {
         return $this->belongsTo(AttributeValue::class, 'attribute_value_id');
     }
-    
 }

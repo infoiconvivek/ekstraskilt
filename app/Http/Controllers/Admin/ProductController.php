@@ -10,6 +10,7 @@ use App\Models\Attribute;
 use App\Models\AttributeValue;
 use App\Models\ProductAttribute;
 use App\Models\Variation;
+use App\Models\ProductVariation;
 use App\Models\Category;
 use App\Helpers\Helper;
 use Illuminate\Support\Str;
@@ -27,7 +28,7 @@ class ProductController extends Controller
     public function create(Request $request)
     {
         $data['categories'] = Category::where('parent_id', null)->orderby('id', 'desc')->get();
-        $data['attributes'] = Attribute::orderBy('id','desc')->get();
+        $data['attributes'] = Attribute::orderBy('id', 'desc')->get();
         $data['product_attributes'] = [];
         return view('admin.product.product-form')->with($data);
     }
@@ -79,17 +80,23 @@ class ProductController extends Controller
             //dd($product);
             $product->save();
 
-            $product_attribute = ProductAttribute::firstOrNew(['product_id' =>  $product->id, 'attribute_id'=>$request->attribute_id, 'attribute_value_id'=>$request->attribute_value_id]);
-           
-            if($request->attribute_id != '')
-            {
+            $product_attribute = ProductAttribute::firstOrNew(['product_id' =>  $product->id, 'attribute_id' => $request->attribute_id, 'attribute_value_id' => $request->attribute_value_id]);
+
+            if ($request->attribute_id != '') {
                 $product_attribute->product_id = $product->id;
                 $product_attribute->attribute_id = $request->attribute_id;
                 $product_attribute->attribute_value_id = $request->attribute_value_id;
                 $product_attribute->status = 1;
                 $product_attribute->save();
             }
-            
+            foreach ($request->variations as $variation) {
+                ProductVariation::create([
+                    'product_id' => $product->id,
+                    'sku' => $variation['sku'],
+                    'price' => $variation['price'],
+                    'attributes' => json_encode($variation['attributes']),
+                ]);
+            }
             if ($request->gallery_title != '') {
                 $gallery = new ProductGallery();
                 $gallery->product_id = $product->id;
@@ -114,20 +121,12 @@ class ProductController extends Controller
     }
 
 
-    public function generateVariations(Request $request, $productId)
+    public function generateVariations(Request $request)
     {
-        $product = Product::findOrFail($productId);
-        $attributes = $request->attributes;
-        $variations = $this->generateCombinations($attributes);
-
-        foreach ($variations as $variation) {
-            $product->variations()->create([
-                'attributes' => json_encode($variation),
-                'price' => $request->price,
-            ]);
-        }
-
-        return response()->json($product->load('variations'));
+        $attributes = $request['attributes'];
+        
+        $combinations = $this->generateCombinations($attributes);
+        return response()->json($combinations);
     }
 
     private function generateCombinations($arrays)
@@ -149,14 +148,12 @@ class ProductController extends Controller
     public function deleteData(Request $request, $type)
     {
         $id = $request->id;
-        if($type == 'gallery')
-        {
-            $delData= ProductGallery::where('id', $id)->delete();
+        if ($type == 'gallery') {
+            $delData = ProductGallery::where('id', $id)->delete();
         }
-        
-        if($type == 'product_attribute')
-        {
-            $delData= ProductAttribute::where('id', $id)->delete();
+
+        if ($type == 'product_attribute') {
+            $delData = ProductAttribute::where('id', $id)->delete();
         }
 
         return redirect()->back()->with(['message' => 'Record deleted successfully.']);
@@ -170,13 +167,18 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         //$categories = Category::orderBy('id', 'desc')->get();
         $categories = Category::where('parent_id', null)->orderby('id', 'desc')->get();
-        $attributes = Attribute::orderBy('id','desc')->get();
-        $product_attributes = ProductAttribute::where('product_id',$id)->orderBy('id','desc')->get();
-        $variat_attributes = ProductAttribute::where(['product_id'=>$id])->groupBy('attribute_id')->get();
+        //$attributes = Attribute::orderBy('id','desc')->get();
+        $product_attributes = ProductAttribute::where('product_id', $id)->orderBy('id', 'desc')->get();
+        $variat_attributes = ProductAttribute::where(['product_id' => $id])->groupBy('attribute_id')->get();
         if ($type == "edit") {
-         $product_galleries = ProductGallery::where('product_id', $id)->orderby('id','desc')->get();
-         ///$data['variations'] = Attribute::orderBy('id','desc')->get();
-            return view('admin.product.product-form', compact('product', 'categories','attributes','product_attributes','product_galleries','variat_attributes'));
+            $attributes = Attribute::with('values')->get();
+
+            $variations = $product->variations;
+            //dd($variations);
+            $product_galleries = ProductGallery::where('product_id', $id)->orderby('id', 'desc')->get();
+            ///$data['variations'] = Attribute::orderBy('id','desc')->get();
+            return view('admin.product.product-form', compact('product', 'categories', 'attributes', 'product_attributes', 'product_galleries', 'variations', 'variat_attributes'));
+            //return view('admin.product.product-form', compact('product', 'categories','attributes','product_attributes','product_galleries','variat_attributes'));
         }
         if ($type == "delete") {
             $delData1 = ProductAttribute::where('product_id', $id)->delete();

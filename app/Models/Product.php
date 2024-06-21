@@ -21,11 +21,14 @@ class Product extends Model
         return $this->hasMany(ProductImage::class, 'product_id')->orderBy('image_ordering', 'ASC');
     }
 
+    // public function variations()
+    // {
+    //     return $this->hasMany(Variation::class);
+    // }
     public function variations()
     {
-        return $this->hasMany(Variation::class);
+        return $this->hasMany(ProductVariation::class);
     }
-
     public function attributes()
     {
         return $this->hasMany(ProductAttribute::class);
@@ -40,5 +43,4 @@ class Product extends Model
     {
         return $this->belongsToMany(Category::class);
     }
-
 }
