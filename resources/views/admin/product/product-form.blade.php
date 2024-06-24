@@ -294,6 +294,7 @@
                                                     <input type="text" name="variations[][sku]" value="{{ $variation->sku }}" placeholder="SKU">
                                                     <input type="number" name="variations[][price]" value="{{ $variation->price }}" placeholder="Price">
                                                     <input type="hidden" name="variations[][attributes]" value="{{ $variation->attributes }}">
+                                                    <input type="file" name="variations[][image]" accept="image/*">
                                                 </div>
                                                 @endforeach
                                             </div>
@@ -539,9 +540,8 @@
 
 <script>
     const attributesData = @json($attributes);
-    console.log(attributesData);
+
     function generateVariations() {
-        console.log('first');
         const attributes = {};
 
         attributesData.forEach(attribute => {
@@ -550,11 +550,15 @@
                 values.push(input.value);
             });
             if (values.length) {
-                attributes[attribute.id] = values;
+                attributes[attribute.id] = {
+                    name: attribute.name,
+                    values: values.map(valId => {
+                        const value = attribute.values.find(val => val.id == valId);
+                        return value ? value.value : undefined;
+                    })
+                };
             }
         });
-
-        console.log(attributes);
 
         fetch("{{ route('products.generateVariations') }}", {
                 method: 'POST',
@@ -571,13 +575,16 @@
                 const container = document.getElementById('variations-section');
                 container.innerHTML = '';
                 combinations.forEach(combination => {
+                    const attributesText = combination.map(attr => `${attr.name}: ${attr.value}`).join(', ');
                     const div = document.createElement('div');
                     div.className = 'variation';
                     div.innerHTML = `
-                        <input type="text" name="variations[][sku]" placeholder="SKU">
-                        <input type="number" name="variations[][price]" placeholder="Price">
-                        <input type="hidden" name="variations[][attributes]" value='${JSON.stringify(combination)}'>
-                    `;
+                    <strong>Attributes:</strong> ${attributesText}
+                    <input type="text" name="variations[][sku]" placeholder="SKU">
+                    <input type="number" name="variations[][price]" placeholder="Price">
+                    <input type="hidden" name="variations[][attributes]" value='${JSON.stringify(combination)}'>
+                    <input type="file" name="variations[][image]" accept="image/*">
+                `;
                     container.appendChild(div);
                 });
             });
