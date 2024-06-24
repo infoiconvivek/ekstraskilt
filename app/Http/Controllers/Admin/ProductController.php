@@ -38,7 +38,92 @@ class ProductController extends Controller
         $attributeValues = AttributeValue::where('attribute_id', $attribute_id)->get();
         return response()->json($attributeValues);
     }
+    public function save(Request $request)
+    {
+        $validated = $request->validate([
+            'title' => 'required|max:255',
+            'thumbnail' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'status' => 'required',
+            'variations.*.sku' => 'required|max:255',
+            'variations.*.price' => 'required|numeric',
+            'variations.*.attributes' => 'required|array',
+            'variations.*.attributes.*' => 'required|string',
+        ]);
 
+        if (!$request->product_id) {
+            $product = new Product();
+            $msg = "Product Added Successfully.";
+        } else {
+            $product = Product::findOrFail($request->product_id);
+            $msg = "Product Updated Successfully.";
+        }
+
+        try {
+            $product->category_id = $request->category_id;
+            $product->title = $request->title;
+            $product->slug = Str::slug($request->title, '-');
+            $product->price = $request->price;
+            $product->sell_price = $request->sell_price;
+            $product->design_id = $request->design_id;
+            $product->description = $request->short_description;
+            $product->content = $request->content;
+            $product->sku = $request->sku;
+            $product->status = $request->status;
+
+            if ($request->hasFile('thumbnail')) {
+                $file_path = public_path('storage/products/');
+                (!file_exists($file_path)) && mkdir($file_path, 0777, true);
+                $name = $request->thumbnail->getClientOriginalName();
+                $filename = date('ymdgis') . Str::slug($name, '-');
+                $request->thumbnail->move($file_path, $filename);
+                $product->thumbnail = $filename;
+            }
+
+            $product->save();
+
+            if ($request->attribute_id && $request->attribute_value_id) {
+                $product_attribute = ProductAttribute::firstOrNew([
+                    'product_id' => $product->id,
+                    'attribute_id' => $request->attribute_id,
+                    'attribute_value_id' => $request->attribute_value_id,
+                ]);
+                $product_attribute->status = 1;
+                $product_attribute->save();
+            }
+
+            if ($request->variations) {
+                foreach ($request->variations as $variation) {
+                    ProductVariation::create([
+                        'product_id' => $product->id,
+                        'sku' => $variation['sku'],
+                        'price' => $variation['price'],
+                        'attributes' => json_encode($variation['attributes']),
+                    ]);
+                }
+            }
+
+            if ($request->gallery_title) {
+                $gallery = new ProductGallery();
+                $gallery->product_id = $product->id;
+                $gallery->title = $request->gallery_title;
+
+                if ($request->hasFile('gallery_image')) {
+                    $galname = $request->gallery_image->getClientOriginalName();
+                    $gal_filename = date('ymdgis') . Str::slug($galname, '-');
+                    $request->gallery_image->move(public_path('storage/product/gallery/'), $gal_filename);
+                    $gallery->image = 'storage/product/gallery/' . $gal_filename;
+                }
+
+                $gallery->order_by = $request->gallery_orderby;
+                $gallery->save();
+            }
+
+            return redirect()->back()->with(["msg" => $msg, 'msg_type' => 'success']);
+        } catch (Exception $e) {
+            return redirect()->back()->with(["msg" => $e->getMessage(), 'msg_type' => 'danger']);
+        }
+    }
+    /*
     public function save(Request $request)
     {
         $validated = $request->validate([
@@ -118,13 +203,13 @@ class ProductController extends Controller
         } catch (Exception $e) {
             return redirect()->back()->with(["msg" => $e->getMessage(), 'msg_type' => 'danger']);
         }
-    }
+    }*/
 
 
     public function generateVariations(Request $request)
     {
-        $attributes = $request['attributes'];
-        
+        $attributes = $request->input('attributes');
+
         $combinations = $this->generateCombinations($attributes);
         return response()->json($combinations);
     }
@@ -135,8 +220,8 @@ class ProductController extends Controller
         foreach ($arrays as $property => $propertyValues) {
             $tmp = [];
             foreach ($result as $resultItem) {
-                foreach ($propertyValues as $propertyValue) {
-                    $tmp[] = array_merge($resultItem, [$property => $propertyValue]);
+                foreach ($propertyValues['values'] as $propertyValue) {
+                    $tmp[] = array_merge($resultItem, [$property => ['name' => $propertyValues['name'], 'value' => $propertyValue]]);
                 }
             }
             $result = $tmp;
